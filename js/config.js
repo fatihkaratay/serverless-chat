@@ -1,4 +1,4 @@
 var poolData = {
-    UserPoolId: 'us-east-1_IuYYIQcAx',
-    ClientId: '35q4921lt8cq799s6in9g2dne2'
+    UserPoolId: '<your-pool-id>',
+    ClientId: '<your-client-app-id>'
 };

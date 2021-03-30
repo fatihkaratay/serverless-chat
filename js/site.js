@@ -54,7 +54,11 @@ var ChatApp = window.ChatApp || {};
 
     ChatApp.populateChats = function () {
         ChatApp.useToken(function (token) {
-            apiClient.conversationsGet({}, null, {headers: {Authorization: token}})
+            apiClient.conversationsGet({}, null, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
                 .then(function (result) {
                     var currentUsername = userPool.getCurrentUser().getUsername();
 
@@ -81,16 +85,22 @@ var ChatApp = window.ChatApp || {};
     ChatApp.loadChat = function () {
         var currentUsername = userPool.getCurrentUser().getUsername();
         ChatApp.useToken(function (token) {
-            apiClient.conversationsIdGet({id: location.hash.substring(1)}, null, {headers: {Authorization: token}})
+            apiClient.conversationsIdGet({
+                    id: location.hash.substring(1)
+                }, null, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
                 .then(function (result) {
                     var lastRendered = lastChat === null ? 0 : lastChat;
-                    if((lastChat === null && result.data.last) || lastChat < result.data.last) {
+                    if ((lastChat === null && result.data.last) || lastChat < result.data.last) {
                         lastChat = result.data.last;
                     } else {
                         return;
                     }
                     result.data.messages.forEach(function (message) {
-                        if(message.time > lastRendered) {
+                        if (message.time > lastRendered) {
                             var panel = $('<div class="panel">');
                             if (message.sender === currentUsername) {
                                 panel.addClass('panel-default');
@@ -125,8 +135,14 @@ var ChatApp = window.ChatApp || {};
 
     ChatApp.send = function () {
         // We can assume the token will be set by now
-        ChatApp.useToken(function(token) {
-            apiClient.conversationsIdPost({id: location.hash.substring(1)}, $('#message').val(), {headers: {Authorization: token}})
+        ChatApp.useToken(function (token) {
+            apiClient.conversationsIdPost({
+                    id: location.hash.substring(1)
+                }, $('#message').val(), {
+                    headers: {
+                        Authorization: token
+                    }
+                })
                 .then(function () {
                     $('#message').val('').focus();
                     ChatApp.loadChat();
@@ -136,11 +152,15 @@ var ChatApp = window.ChatApp || {};
 
     ChatApp.populatePeople = function () {
         ChatApp.useToken(function (token) {
-            apiClient.usersGet({}, null, {headers: {Authorization: token}})
+            apiClient.usersGet({}, null, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
                 .then(function (result) {
                     result.data.forEach(function (name) {
                         var button = $('<button class="btn btn-primary">Start Chat</button>');
-                        button.on('click', function() {
+                        button.on('click', function () {
                             ChatApp.startChat(name);
                         });
 
@@ -158,7 +178,11 @@ var ChatApp = window.ChatApp || {};
 
     ChatApp.startChat = function (name) {
         // We know the token will be set by now
-        apiClient.conversationsPost({}, [name], {headers: {Authorization: token}})
+        apiClient.conversationsPost({}, [name], {
+                headers: {
+                    Authorization: token
+                }
+            })
             .then(function (result) {
                 window.location = '/chat.html#' + result.data;
             });
